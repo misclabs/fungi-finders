@@ -273,11 +273,65 @@
     justify-content: space-between;
   }
 
+  [aria-controls="primary-nav"] {
+    z-index: 200;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    img {
+      border-radius: 0;
+    }
+  }
+
+  [aria-controls="primary-nav"] {
+    display: none;
+  }
+
   .site-nav {
     ul {
       display: flex;
       flex-wrap: wrap;
       gap: 0.25rem var(--equal-columns-gap, 1rem);
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+      [aria-expanded="true"] ~ & {
+        display: block;
+      }
+
+      position: absolute;
+      z-index: 100;
+      top: 0;
+      right: 0;
+      font-size: --font-size-lg;
+      font-weight: 700;
+      font-family: var(--font-family-header);
+      background-color: var(--background-accent-main);
+      padding: 2rem;
+      border-end-start-radius: var(--border-radius-lg);
+
+      ul {
+        gap: 0;
+        flex-direction: column;
+      }
+
+      li:not(:first-child) {
+        margin-block-start: 1.5rem;
+        padding-block-start: 1.5rem;
+        border-top: 2px solid var(--background-accent-light);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    [aria-controls="primary-nav"] {
+      display: block;
     }
   }
 
