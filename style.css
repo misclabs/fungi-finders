@@ -155,6 +155,13 @@
   html {
     font-family: var(--font-family-body);
     line-height: 1.6;
+    scroll-padding: 3rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -192,6 +199,11 @@
 }
 
 @layer layout {
+  .flex-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
   .flow > :where(:not(:first-child)) {
     margin-top: var(--flow-spacer, 1em);
   }
@@ -200,6 +212,17 @@
   .grid-flow {
     display: grid;
     gap: var(--grid-flow-gap, 1rem);
+  }
+
+  .grid-auto-fit {
+    --auto-fit-min-col-size: 250px;
+
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(var(--auto-fit-min-col-size), 100%), 1fr)
+    );
   }
 
   .equal-columns {
@@ -394,8 +417,79 @@
     }
   }
 
-  .card {
+  .mushroom-guide {
+    --card-title-font-size: var(--font-size-lg);
+    --card-title-color: var(--color-high-contrast);
+    --card-gap: 0.75rem;
+  }
+
+  .faq-bento {
+    --card-title-color: var(--color-high-contrast);
+
     display: grid;
+    gap: 1rem;
+    grid-template-areas:
+      "card-one"
+      "card-two"
+      "card-three"
+      "card-four";
+
+    @media (width > 600px) {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "card-one card-two"
+        "card-three card-four";
+    }
+
+    @media (min-width: 728px) {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-areas:
+        "card-one   card-two    card-four"
+        "card-three card-three  card-four";
+    }
+
+    .card > img {
+      height: 100%;
+      object-fit: cover;
+      /* object-position: top left; */
+    }
+
+    @media (min-width: 600px) {
+      .card:nth-child(even) > img {
+        order: 3;
+      }
+    }
+
+    > :nth-child(1) {
+      grid-area: card-one;
+    }
+
+    > :nth-child(2) {
+      grid-area: card-two;
+    }
+
+    > :nth-child(3) {
+      grid-area: card-three;
+      @media (min-width: 728px) {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr 1fr;
+
+        img {
+          grid-column: 1 / 2;
+          grid-row: 1 / 3;
+        }
+      }
+    }
+
+    > :nth-child(4) {
+      grid-area: card-four;
+    }
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
     gap: var(--card-gap, 1rem);
     padding: 1rem;
     background-color: var(--background-light);
@@ -409,6 +503,45 @@
   .card__title {
     font-size: var(--card-title-font-size, var(--font-size-heading-sm));
     color: var(--card-title-color, var(--color-brand));
+  }
+
+  .card__note {
+    margin-block-start: auto;
+    background-color: var(--background-extra-light);
+    padding: 0.75rem;
+    border-radius: var(--border-radius-md);
+  }
+
+  .tag-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    li {
+      font-family: var(--font-family-header);
+      border-radius: var(--border-radius-sm);
+      font-size: var(--font-size-sm);
+      color: var(--color-high-contrast);
+      padding: 0rem 0.25rem;
+      background-color: var(--tag-color, red);
+    }
+
+    [data-edible="edible"] {
+      --tag-color: var(--background-accent-main);
+    }
+    [data-edible="toxic"] {
+      --tag-color: var(--clr-red-500);
+    }
+
+    [data-season="spring"] {
+      --tag-color: var(--clr-teal-500);
+    }
+    [data-season="summer"] {
+      --tag-color: var(--background-accent-main);
+    }
+    [data-season="fall"] {
+      --tag-color: var(--clr-orange-500);
+    }
   }
 
   .button {
@@ -427,6 +560,14 @@
       color: var(--color-high-contrast);
       background-color: var(--background-accent-light);
     }
+  }
+
+  select {
+    padding: 0.5rem 1rem;
+    background-color: var(--background-accent-main);
+    border: 0;
+    border-radius: var(--border-radius-md);
+    color: var(--color-high-contrast);
   }
 }
 
